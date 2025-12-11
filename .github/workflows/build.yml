@@ -14,12 +14,16 @@ jobs:
 
       - name: Install Capacitor & Build App
         run: |
-          mkdir www
-          cp index.html main.js kaplay.js icon.png splash.png www/ 2>/dev/null || :
+          mkdir -p www
+          find . -name "index.html" -exec cp {} www/ \;
+          find . -name "main.js" -exec cp {} www/ \;
+          find . -name "kaplay.js" -exec cp {} www/ \;
+          find . -name "*.png" -exec cp {} www/ \;
+          ls www
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
           # Replace 'Blob Jump' with your app name below
-          npx cap init "Blob Jump" "com.yourname.blob" --web-dir .
+          npx cap init "Blob Jump" "com.yourname.blob" --web-dir www
           npx cap add android
           npx cap sync android
 
