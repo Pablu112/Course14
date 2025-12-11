@@ -1,0 +1,52 @@
+name: Build Offline APK
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install Capacitor & Build App
+        run: |
+          mkdir -p www
+          find . -maxdepth 1 -name "index.html" -exec cp {} www/ \;
+          find . -maxdepth 1 -name "main.js" -exec cp {} www/ \;
+          find . -name "kaplay.js" -exec cp {} www/ \;
+        
+          npm init -y
+          npm install @capacitor/core @capacitor/cli@latest @capacitor/core@latest @capacitor/android@latest @capacitor/assets@latest
+          # Replace 'Blob Jump' with your app name below
+          npx cap init "Blob Jump" "com.yourname.blob" --web-dir www
+          npx cap add android
+          npx capacitor-assets generate --android
+          npx cap sync android
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Enable Jetifier
+        run: |
+          echo "android.enableJetifier=true" >> android/gradle.properties
+          echo "android.useAndroidX=true" >> android/gradle.properties
+
+      - name: Build APK with Gradle
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew clean
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: BlobGame-Offline-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
