@@ -18,13 +18,13 @@ jobs:
           find . -maxdepth 1 -name "index.html" -exec cp {} www/ \;
           find . -maxdepth 1 -name "main.js" -exec cp {} www/ \;
           find . -name "kaplay.js" -exec cp {} www/ \;
-          find . -name "*.png" -exec cp {} www/ \;
         
           npm init -y
-          npm install @capacitor/core @capacitor/cli@latest @capacitor/core@latest @capacitor/android@latest
+          npm install @capacitor/core @capacitor/cli@latest @capacitor/core@latest @capacitor/android@latest @capacitor/assets@latest
           # Replace 'Blob Jump' with your app name below
           npx cap init "Blob Jump" "com.yourname.blob" --web-dir www
           npx cap add android
+          npx capacitor-assets generate --android
           npx cap sync android
 
       - name: Setup Java
