@@ -10,21 +10,20 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Install Capacitor & Build App
         run: |
           mkdir -p www
           find . -maxdepth 1 -name "index.html" -exec cp {} www/ \;
           find . -maxdepth 1 -name "main.js" -exec cp {} www/ \;
-          find . -maxdepth 1 -name "kaplay.js" -exec cp {} www/ \;
-          find . -maxdepth 1 -name "*.png" -exec cp {} www/ \;
+          find . -name "kaplay.js" -exec cp {} www/ \;
+          find . -name "*.png" -exec cp {} www/ \;
         
           npm init -y
           npm install @capacitor/core @capacitor/cli@latest @capacitor/core@latest @capacitor/android@latest
           # Replace 'Blob Jump' with your app name below
           npx cap init "Blob Jump" "com.yourname.blob" --web-dir www
-          rm -rf android/
           npx cap add android
           npx cap sync android
 
