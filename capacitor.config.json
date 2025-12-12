@@ -1,0 +1,9 @@
+{
+  "appId": "com.pablu112.blob",
+  "appName": "Blob Jump",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "assets": {
+    "icon": "assets/icon.png"
+  }
+}
